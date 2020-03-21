@@ -71,9 +71,3 @@ def export(sdf, out_path):
     return sdf.to_csv(out_path, sep=',', index=False)
 
 
-# Consume code
-ip_locality_service = get_localities("https://nhmlac.maps.arcgis.com/home/index.html",
-                                     "dmarkbreiter_NHMLAC", "j5BDj%k3@BaG")
-
-export(ip_locality_service, '/Users/macbook/Desktop/FieldLocalitiesTestExport.csv')
-
