@@ -99,9 +99,7 @@ class Localities:
 
 # Consume code
 if __name__ == '__main__':
-    ip_localities_layer = get_localities_layer("https://nhmlac.maps.arcgis.com/home/index.html",
-                                         "dmarkbreiter_NHMLAC", "j5BDj%k3@BaG")
-
+    ip_localities_layer = get_localities_layer()
     IP_Localities = Localities(ip_localities_layer).reformat()
 
-    IP_Localities.export_to_csv('/Users/macbook/Desktop/FieldLocalitiesTestExport3_22.csv')
+    IP_Localities.export_to_csv()
