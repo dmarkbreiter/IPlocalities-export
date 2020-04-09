@@ -1,13 +1,19 @@
 import tkinter as tk
+from tkinter import ttk as ttk
 from tkinter import filedialog
 
+import localities
+
 window = tk.Tk()
+window_background = "#eeeeee"
+window.configure(background=window_background)
 window.title("LACMIP Localities")
 window.columnconfigure(0, minsize=250, weight=1)
 # window.columnconfigure(1, minsize=50, weight=1)
 # window.columnconfigure(2, minsize=250, weight=1)
 
-
+s = ttk.Style()
+s.configure('new.TSeparator', background="#fff")
 def config_browse():
     filename = filedialog.askopenfilename()
     add_columns_lbl["text"] = filename
@@ -21,21 +27,22 @@ def savefile_browse():
 
 
 # Create login frame
-login_frm = tk.Frame(window)
+login_frm = ttk.Label(window)
 login_frm.columnconfigure(0, minsize=200, weight=1)
 login_frm.columnconfigure(1, minsize=50, weight=1)
 login_frm.columnconfigure(2, minsize=200, weight=1)
 login_frm.grid(column=0, row=0, padx=20, pady=5, sticky="nsew")
 
 # Create widgets for login frame
-login_title_lbl = tk.Label(master=login_frm, text="Log into ArcGIS Online account".upper(), font=('system', 13, 'bold'))
-username_lbl = tk.Label(master=login_frm, text="Username:")
-username_entry = tk.Entry(master=login_frm)
-password_lbl = tk.Label(master=login_frm, text="Password:")
-password_entry = tk.Entry(master=login_frm)
-url_lbl = tk.Label(master=login_frm, text="ArcGIS Online Url:")
-url_entry = tk.Entry(master=login_frm)
-login_btn = tk.Button(master=login_frm, text="Submit")
+login_title_lbl = ttk.Label(master=login_frm, text="Log into ArcGIS Online account", font=('system', 13, 'bold'))
+username_lbl = ttk.Label(master=login_frm, text="Username:")
+username_entry = ttk.Entry(master=login_frm)
+password_lbl = ttk.Label(master=login_frm, text="Password:")
+password_entry = ttk.Entry(master=login_frm)
+url_lbl = ttk.Label(master=login_frm, text="ArcGIS Online Url:")
+url_entry = ttk.Entry(master=login_frm)
+login_btn = ttk.Button(master=login_frm, text="Submit", command=localities.log_in)
+login_sep = ttk.Separator(master=login_frm, orient='horizontal', style='new.TSeparator')
 
 # Assign widgets to frames
 login_title_lbl.grid(row=0, column=0, sticky="w")
@@ -46,22 +53,26 @@ password_entry.grid(row=2, column=2, pady=2, sticky="nsew")
 url_lbl.grid(row=3, column=0, sticky="w")
 url_entry.grid(row=4, column=0, sticky="nsew")
 login_btn.grid(row=5, column=0, pady=10, sticky="w")
+login_sep.grid(row=6, columnspan=3, pady=10, sticky="ew")
 
 # Create weblayer frame
-weblyr_frm = tk.Frame(window)
+weblyr_frm = ttk.Frame(window)
 weblyr_frm.columnconfigure(0, minsize=200, weight=1)
 weblyr_frm.columnconfigure(1, minsize=50, weight=1)
 weblyr_frm.columnconfigure(2, minsize=200, weight=1)
 weblyr_frm.grid(column=0, row=1, padx=20, pady=5, sticky="nsew")
 
 # Create widgets for login frame
-weblyr_title_lbl = tk.Label(master=weblyr_frm, text="Retrieve web layer".upper(), font=('system', 13, 'bold'))
-layerid_lbl = tk.Label(master=weblyr_frm, text="Layer ID:")
-layerid_entry = tk.Entry(master=weblyr_frm)
-or_lbl = tk.Label(master=weblyr_frm, text="--OR--")
-lyrname_lbl = tk.Label(master=weblyr_frm, text="Layer Name:")
-lyrname_entry = tk.Entry(master=weblyr_frm)
-weblyr_btn = tk.Button(master=weblyr_frm, text="Submit")
+weblyr_title_lbl = ttk.Label(master=weblyr_frm, text="Retrieve web layer", font=('system', 13, 'bold'))
+layerid_lbl = ttk.Label(master=weblyr_frm, text="Layer ID:")
+layerid_entry = ttk.Entry(master=weblyr_frm)
+layerid = layerid_entry.get()
+or_lbl = tk.Label(master=weblyr_frm, text=" -- OR -- ", bg=window_background)
+lyrname_lbl = ttk.Label(master=weblyr_frm, text="Layer Name:")
+lyrname_entry = ttk.Entry(master=weblyr_frm)
+lyrname = lyrname_entry.get()
+weblyr_btn = ttk.Button(master=weblyr_frm, text="Submit", command=localities.get_localities_layer)
+weblyr_sep = ttk.Separator(master=weblyr_frm, orient='horizontal', style='new.TSeparator')
 
 # Assign widgets to weblayer frame
 weblyr_title_lbl.grid(row=0, column=0, sticky="w")
@@ -71,23 +82,25 @@ or_lbl.grid(row=2, column=1, sticky="nsew")
 lyrname_lbl.grid(row=1, column=2, sticky="w")
 lyrname_entry.grid(row=2, column=2, sticky="nsew")
 weblyr_btn.grid(row=3, column=0, pady=10, sticky='w')
+weblyr_sep.grid(row=4, columnspan=3, pady=10, sticky="ew")
 
 # Create config frame
-config_frm = tk.Frame(window)
+config_frm = ttk.Frame(window)
 config_frm.columnconfigure(0, minsize=200, weight=1)
 config_frm.columnconfigure(1, minsize=50, weight=1)
 config_frm.columnconfigure(2, minsize=200, weight=1)
 config_frm.grid(column=0, row=2, padx=20, pady=5, sticky="nsew")
 
 # Create widgets for config frame
-config_title_lbl = tk.Label(master=config_frm, text="Configure locality data".upper(), font=('system', 13, 'bold'))
-start_date_lbl = tk.Label(master=config_frm, text="Start Date:")
-start_date_entry = tk.Entry(master=config_frm)
-end_date_lbl = tk.Label(master=config_frm, text="End Date:")
-end_date_entry = tk.Entry(master=config_frm)
-add_columns_lbl = tk.Label(master=config_frm, text="Choose a csv with additional columns to add")
-add_columns_btn = tk.Button(master=config_frm, text="Add file...", command=config_browse)
-csv_name_lbl = tk.Label(master=config_frm, text="")
+config_title_lbl = ttk.Label(master=config_frm, text="Configure locality data", font=('system', 13, 'bold'))
+start_date_lbl = ttk.Label(master=config_frm, text="Start Date:")
+start_date_entry = ttk.Entry(master=config_frm)
+end_date_lbl = ttk.Label(master=config_frm, text="End Date:")
+end_date_entry = ttk.Entry(master=config_frm)
+add_columns_lbl = ttk.Label(master=config_frm, text="Choose a csv with additional columns to add")
+add_columns_btn = ttk.Button(master=config_frm, text="Add file...", command=config_browse)
+csv_name_lbl = ttk.Label(master=config_frm, text="")
+config_sep = ttk.Separator(master=config_frm, orient='horizontal', style='new.TSeparator')
 
 # Assign widgets to config frame
 config_title_lbl.grid(row=0, column=0, sticky="w")
@@ -96,25 +109,41 @@ start_date_entry.grid(row=2, column=0, sticky="nsew")
 end_date_lbl.grid(row=1, column=2, sticky="w")
 end_date_entry.grid(row=2, column=2, sticky="nsew")
 add_columns_btn.grid(row=3, column=0, pady=10, sticky="w")
-add_columns_lbl.grid(row=3, column=0, columnspan=3, pady=10, padx=65, sticky="w")
+add_columns_lbl.grid(row=3, column=0, columnspan=3, pady=10, padx=100, sticky="w")
+config_sep.grid(row=4, columnspan=3, pady=10, sticky="ew")
 
 # Create export frame
-export_frm = tk.Frame(window)
+export_frm = ttk.Frame(window)
 export_frm.columnconfigure(0, minsize=200, weight=1)
 export_frm.columnconfigure(1, minsize=50, weight=1)
 export_frm.columnconfigure(2, minsize=200, weight=1)
 export_frm.grid(column=0, row=3, padx=20, pady=5, sticky="nsew")
 
 # Create widgets for export frame
-export_title_lbl = tk.Label(master=export_frm, text="Export localities csv".upper(), font=('system', 13, 'bold'))
-file_loc_lbl = tk.Label(master=export_frm, text="Save file location:")
-browse_btn = tk.Button(master=export_frm, text="Browse...", command=savefile_browse)
-savefile_name_lbl = tk.Label(master=export_frm, text="")
+export_title_lbl = ttk.Label(master=export_frm, text="Export csv", font=('system', 13, 'bold'))
+file_loc_lbl = ttk.Label(master=export_frm, text="Save file location:")
+browse_btn = ttk.Button(master=export_frm, text="Browse...", command=savefile_browse)
+savefile_name_lbl = ttk.Label(master=export_frm, text="")
 
 # Assign widgets to export frame
 export_title_lbl.grid(row=0, column=0, sticky="w")
 file_loc_lbl.grid(row=1, column=0, sticky="w")
-browse_btn.grid(row=2, column=0, pady=10, sticky="w")
-savefile_name_lbl.grid(row=2, column=0, columnspan=3, pady=10, padx=65, sticky="w")
+browse_btn.grid(row=2, column=0, pady=5, sticky="w", command=localities.Localities)
+savefile_name_lbl.grid(row=2, column=0, columnspan=3, pady=5, padx=65, sticky="w")
+
+# Create footer frame
+footer_frm = tk.Frame(window, background="#f5f5f7", pady=5)
+export_frm.columnconfigure(0, minsize=100, weight=1)
+export_frm.columnconfigure(1, minsize=100, weight=1)
+export_frm.columnconfigure(2, minsize=100, weight=1)
+footer_frm.grid(column=0, row=4, sticky="nsew")
+
+# Create widgets for footer frame
+name_lbl = tk.Label(master=footer_frm, text="Created by: Daniel Markbreiter, LACMIP", bg="#f5f5f7")
+update_lbl = tk.Label(master=footer_frm, text="04/08/2020", bg="#f5f5f7")
+
+# Assign widgets to footer frame
+name_lbl.grid(row=0, column=0, sticky="w")
+update_lbl.grid(row=0, column=2, sticky="nsew")
 
 window.mainloop()
